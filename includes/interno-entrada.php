@@ -31,8 +31,8 @@
         $remitente =$_POST['buscarRem'];
         $cargo =$_POST['cargo'];
         $unidad =$_POST['unidad'];
-        $oficioRef =$_POST['ofiReferencia'];
-        $numOficio =$_POST['numOficio'];
+        $oficioRef =strtoupper($_POST['ofiReferencia']);
+        $numOficio =strtoupper($_POST['numOficio']);
         $respuesta =$_POST['respuesta'];
         $asunto =$_POST['asunto'];
         $descripcion =$_POST['descripcion'];
@@ -73,6 +73,7 @@
                 //restringimos que solo queremos documentos con extension pdf
                 $extension='application/pdf';
                 if($docOficio['type']== $extension){
+                    //Aqui puede ir un ciclo foreach para poder subir varios oficios a la vez
                     //creamos las carpetas necesarias para guardar el oficio
                     $root='../';                    //regresamos al directorio raiz
                     $oficiosDir=$root.'oficios';    //Creamos la carpeta oficios en la carpeta raiz si no existe
@@ -91,13 +92,16 @@
                     if(!is_dir($urlDir)){
                         mkdir($urlDir);
                     }
-                    $urlDoc= $urlDir.$docOficio['name'];  //Se obtiene la url final para subir el oficio
+                    //$urlDoc= $urlDir.$docOficio['name'];  //Se obtiene la url donde se subira el oficio
+                    //$fecha=date('d-m-y-h-i-s');  //obtenemos fecha para evitar lo más posible duplicados con el mismo nombre                   
+                    $urlDoc =$urlDir.$caracter.'-numOfi-'.$numOficio.'.pdf';  //cambiamos el nombre del oficio
                     //se compruaba que el oficio no exista en la carpeta del mes en curso
                     if(!file_exists($urlDoc)){
                         //usamos la url que generamos para mandar a guardar el oficio
                         $oficioUrl=@move_uploaded_file($docOficio['tmp_name'], $urlDoc);
                         //generamos una url mas limpia que se guardara en la DB sin hacer mención del directorio raiz 
-                        $urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$docOficio['name'];
+                        //$urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$docOficio['name'];
+                        $urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$caracter.'-numOfi-'.$numOficio.'.pdf';
                         //al haber subido el oficio ahora registramos la informacion en la DB
                         uploadOficioIE($idUser, $caracter, $destId, $remId, $cargo, $unidad, $oficioRef, $numOficio, $respuesta, $asunto, $descripcion, $urlDB, $fechaElab, $fechaResp, $fechaSICT);
                         if($oficioUrl){
@@ -106,7 +110,7 @@
                         }
                         else{
                             echo "<script>alert('¡El oficio no se pudo subir :(!'); </script>";
-                            echo "<script>setTimeout(\"location.href='../oficios-internos.php'\",500); </script>";
+                            echo "<script>setTimeout(\"location.href='../oficios-internos.php'\",25500); </script>";
                         }
                     }
                     else{
@@ -125,7 +129,7 @@
         
     }
     echo listaErrores($errores);
-    //echo $numOficio.'----'.$oficioRef;
+    //echo $urlDoc;
 ?>
 <link href="/favicon.ico" rel="shortcut icon">
     <link href="https://framework-gb.cdn.gob.mx/assets/styles/main.css" rel="stylesheet">

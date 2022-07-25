@@ -31,8 +31,8 @@
         $destinatario =$_POST['buscarDest'];
         $remitente =$_POST['buscarRem'];
         $empresa =$_POST['buscarEmp'];
-        $oficioRef =$_POST['buscarOficioRef'];
-        $numOficio =$_POST['buscarNumeroOf'];
+        $oficioRef =strtoupper($_POST['buscarOficioRef']);
+        $numOficio =strtoupper($_POST['buscarNumeroOf']);
         $respuesta =$_POST['respuesta'];
         $asunto =$_POST['asunto'];
         $descripcion =$_POST['descripcion'];
@@ -94,13 +94,16 @@
                     if(!is_dir($urlDir)){
                         mkdir($urlDir);
                     }
-                    $urlDoc= $urlDir.$docOficio['name']; //,$numOficio; //Se obtiene la url final para subir el oficio
+                    //$urlDoc= $urlDir.$docOficio['name']; //,$numOficio; //Se obtiene la url final para subir el oficio
+                    //$fecha=date('d-m-y-h-i-s');  //obtenemos fecha para evitar lo más posible duplicados con el mismo nombre
+                    $urlDoc =$urlDir.$caracter.'-numOfi-'.$numOficio.'.pdf';   //cambiamos el nombre del oficio
                     //se compruaba que el oficio no exista en la carpeta del mes en curso
                     if(!file_exists($urlDoc)){
                         //usamos la url que generamos para mandar a guardar el oficio
                         $oficioUrl=@move_uploaded_file($docOficio['tmp_name'], $urlDoc);
                         //generamos una url mas limpia que se guardara en la DB sin hacer mención del directorio raiz 
-                        $urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$docOficio['name'];
+                        //$urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$docOficio['name'];
+                        $urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$caracter.'-numOfi-'.$numOficio.'.pdf';
                         //al haber subido el oficio ahora registramos la informacion en la DB
                         uploadOficioEx($idUser, $caracter, $destId, $remId, $empId, $numOficio, $oficioRef, $fechaElab, $asunto, $respuesta, $fechaResp, $descripcion, $urlDB);
                         if($oficioUrl){

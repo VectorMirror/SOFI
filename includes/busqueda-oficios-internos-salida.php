@@ -64,7 +64,7 @@
             
             
             <td>
-                <a href="../<?php echo $oficioIS['ofi_url']?>" class="btn btn-default" target="_blank">VER OFICIO</a>
+                <a href="<?php echo $oficioIS['ofi_url']?>" class="btn btn-default" target="_blank">VER OFICIO</a>
             </td>  
           </tr>
     <?php 
