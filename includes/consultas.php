@@ -44,7 +44,7 @@
     $unidades=$DB_conection->query($query6);
 
     //consulta para mandar a llamar los ultimos documentos subidos 
-    $query7="SELECT ofi_id, ofi_caracter, ofi_asunto, ofi_fechaE, ofi_fechaSOFI, ofi_url FROM oficios ORDER BY ofi_fechaSOFI DESC LIMIT 7 ";
+    $query7="SELECT ofi_id, ofi_caracter, ofi_asunto, ofi_fechaE, ofi_fechaSOFI, ofi_url FROM oficios ORDER BY ofi_fechaSOFI DESC LIMIT 6 ";
     $lastOfi=$DB_conection->query($query7);
     
     //consulta para que me muestre las ultimas empresas registradas
