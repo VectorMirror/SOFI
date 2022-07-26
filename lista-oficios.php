@@ -44,22 +44,31 @@
     <!-- Contenido -->
 
   <?php include_once 'header.php';?>
-  
+ <div class="container"> 
 <h3>Lista de Oficios</h3>
 <hr class="red">
+      </div>
   <!--<div class="row">
             <td>
               <a href="form_crea_usuario.php" class="btn btn-link">Nuevo usuario</a>
             </td>
   </div>-->
-
-  <select class="form-control" id="filtroBusqueda">
-    <option selected="true" disabled="disabled" value="">Seleciona categoria</option>
-    <option value="includes/busqueda-oficios-internos-entrada.php" id="op1">Oficios Internos de Entrada</option>
-    <option value="includes/busqueda-oficios-internos-salida.php" id="op2">Oficios Internos de Salida</option>
-    <option value="includes/busqueda-oficios-externos-entrada.php" id="op3">Oficios Externos de Entrada</option>
-    <option value="includes/busqueda-oficios-externos-salida.php" id="op4">Oficios Externos de Salida</option>
-  </select>
+<div class="row">
+  <div class="col-md-3">
+  </div>
+  <div class="col-md-4">
+  
+  </div>
+  <div class="col-md-3"><label></label>
+    <select class="form-control" id="filtroBusqueda">
+      <option selected="true" disabled="disabled" value="">Seleciona una categoria</option>
+      <option value="includes/busqueda-oficios-internos-entrada.php" id="op1">Oficios Internos de Entrada</option>
+      <option value="includes/busqueda-oficios-internos-salida.php" id="op2">Oficios Internos de Salida</option>
+      <option value="includes/busqueda-oficios-externos-entrada.php" id="op3">Oficios Externos de Entrada</option>
+      <option value="includes/busqueda-oficios-externos-salida.php" id="op4">Oficios Externos de Salida</option>
+    </select>
+  </div>
+</div>
     
 
 <div id="content-table">
@@ -68,11 +77,12 @@
 
 </div>   
     </main>
-
+<div class="top-buffer bottom-buffer"></div>
     <!-- JS -->
     
      <!-- Contenido   <script src="https://framework-gb.cdn.gob.mx/gobmx.js"></script>  -->
      <script src="https://framework-gb.cdn.gob.mx/gobmx.js"></script>
+     
   </body>
 </html>
 

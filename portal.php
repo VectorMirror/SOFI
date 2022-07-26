@@ -14,7 +14,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Iniciar Sesión</title>
+    <title>.:PORTAL SOFI:.</title>
 
     <!-- CSS -->
     <link href="/favicon.ico" rel="shortcut icon">
@@ -36,7 +36,7 @@
 <hr class="red">
     <!-- Contenido -->
     <?php include_once 'header.php'; ?>
-
+<main class="container">
     <h3> Bienvenido <?php echo $user['usu_nombre'].' '.$user['usu_apellidoP']. ' '.$user['usu_apellidoM']; ?></h3>
 <hr class="red">
 

@@ -80,17 +80,17 @@
   </head>
   
   <body>
-  
+   
 <h3>Registrar nuevo usuario</h3>
 <hr class="red">
     <!-- Contenido -->
 
     <?php include_once 'header.php'; ?>
-
+    <main class="container"> 
     <h3>Registrar nuevo usuario</h3>
 <hr class="red">
 
-    <div class="row clearfix">
+    <div class="row ">
       <div class="col-md-9">
         <ol class="bottom-buffer top-buffer">
       <div class="tab-pane clearfix " id="tab-01">

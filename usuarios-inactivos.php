@@ -35,8 +35,10 @@
     <!-- Contenido -->
 
     <?php include_once 'header.php'; ?>
+    <div class="container">
 <h3>Usuarios Inactivos</h3>
 <hr class="red">
+</div>
   <!--<div class="row">
             <td>
               <a href="form_crea_usuario.php" class="btn btn-link">Nuevo usuario</a>
@@ -91,7 +93,7 @@
     <?php 
     }
     } else{
-		echo "No se pudo ejecutar la sentencia SQL";
+		echo "No se encontraron resultados";
 	}
     } else{
         echo "Hubo un error";

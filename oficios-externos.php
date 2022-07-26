@@ -53,11 +53,11 @@
   </head>
   
   <body>
-    <h3>Subir oficio externos</h3>
+    <h3>Subir oficio externo</h3>
     <hr class="red">
     <!-- Contenido -->
       <?php include_once 'header.php'; ?>
-
+  <main class="container">
     <h3>Subir oficio externos</h3>
     <hr class="red">
     <main>

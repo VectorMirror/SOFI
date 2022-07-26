@@ -58,7 +58,7 @@
     <hr class="red">
     <!-- Contenido -->
       <?php include_once 'header.php'; ?>
-
+  <main class="container">
     <h3>Subir oficio interno</h3>
     <hr class="red">
     <main>

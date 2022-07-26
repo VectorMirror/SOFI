@@ -3,7 +3,7 @@
     //include_once 'consultas.php';
     //$caracter = $_POST['idB'];
     #consulta multitabla con inner join para mostrar los ultimos oficios subidos
-    $query4= "SELECT o.ofi_id, o.ofi_caracter, o.ofi_referencia, o.ofi_numero, o.ofi_respuesta, o.ofi_asunto, o.ofi_descripcion, o.ofi_fechaE, o.ofi_fechaSICT, o.ofi_fechaResp, o.ofi_fechaSOFI, o.ofi_url,
+    $query4= "SELECT o.ofi_id, o.ofi_referencia, o.ofi_numero, o.ofi_respuesta, o.ofi_asunto, o.ofi_descripcion, o.ofi_fechaE, o.ofi_fechaSICT, o.ofi_fechaResp, o.ofi_fechaSOFI, o.ofi_url,
                 u.usu_nombre, u.usu_apellidoP, u.usu_apellidoM,
                 rem.rem_remitente, d.dest_destinatario, c.cargo_cargo, ud.uni_unidad
                 FROM oficios as o
@@ -15,6 +15,8 @@
                 WHERE o.ofi_caracter='Interno-Entrada' AND o.ofi_activo=0
                 ORDER BY o.ofi_id ASC LIMIT 50;";
     $oficiosIE = $DB_conection->query($query4);
+
+    $numReg=mysqli_num_rows($oficiosIE);
     
 ?>
 <!DOCTYPE html>
@@ -26,8 +28,17 @@
     <title></title>
 </head>
 <body>
-    <h3>Lista de Oficios Internos de Entrada</h3>
+    <h3>Lista de Oficios Internos de Entrada: </h3><?php echo 'Hay '.$numReg.' resultados';?>
     <hr class="red">
+    <!--
+    <div class"row">
+        <div class="col-md-1 bottom-buffer"></div>
+        <div class="col-md-4 bottom-buffer">
+            <span class="icon-search" aria-hidden="true"></span> Filtrar Busqueda 
+            <input type="text" class="form-control" name="buscarOf" id="buscarIE" placeholder="Buscar oficio"/>
+        </div>    
+    </div>
+    -->
     
     <table class="table table-responsive">
 	<thead>
@@ -73,13 +84,25 @@
     <?php 
     }
     } else{
-		echo "No se pudo ejecutar la sentencia SQL";
+		echo "No se encontraron resultados";
 	}
     } else{
         echo "Hubo un error";
     } ?>
     </tbody>
-</table>
-
+    </table>
+    <div class="container">
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
+    <?php echo $numReg; ?>
+    <div class="top-buffer bottom-buffer"></div>
 </body>
 </html>

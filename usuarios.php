@@ -33,9 +33,10 @@
     <!-- Contenido -->
 
   <?php include_once 'header.php';?>
-  
-<h3>Lista de Oficios</h3>
+<div class="container">
+<h3>Lista de usuarios activos</h3>
 <hr class="red">
+</div>
   <!--<div class="row">
             <td>
               <a href="form_crea_usuario.php" class="btn btn-link">Nuevo usuario</a>
@@ -43,7 +44,7 @@
   </div>-->
     
 
-
+<main>
 <table class="table table-responsive">
 	<thead>
 		<tr>
