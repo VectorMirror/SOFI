@@ -5,8 +5,8 @@
 
     $idUser = $_SESSION['id_usuario'];
     $errores = array();
+    $urlDB = '';
     $caracter= 'Externo-Entrada';
-    $docOficio= $_FILES['archivoOficio'];
     //variables para conseguir año y mes y hacer directorios
     $anho=strftime('%Y');
     $mes= ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][date('n')-1];
@@ -67,70 +67,66 @@
         //se verifica que los campos esten llenos
         if(count($errores)==0){
             //si los errores son cero se prosigue a cargar el oficio y a guardar la info en la DB
-            if($docOficio['error']>0 ){
-                //mandamos un mensaje notificando que se envio el formulario sin cargar ningun oficio
-                echo "<script>alert('ERROR No seleccionaste ningún archivo HDPM >:( '); </script>";
-                echo "<script>setTimeout(\"location.href='../oficios-externos.php'\",500); </script>";
-            }
-            else{
-                //restringimos que solo queremos documentos con extension pdf
-                $extension='application/pdf';
-                if($docOficio['type']== $extension){
-                    //creamos las carpetas necesarias para guardar el oficio
-                    $root='../';                    //regresamos al directorio raiz
-                    $oficiosDir=$root.'oficios';    //Creamos la carpeta oficios en la carpeta raiz si no existe
-                    if(!is_dir($oficiosDir)){
-                        mkdir($oficiosDir);
-                    }
-                    $idDir=$oficiosDir.'/'.$idUser.'/';     //Creamos la carpeta del usuario si no existe
-                    if(!is_dir($idDir)){
-                        mkdir($idDir);
-                    }
-                    $anhoDir=$oficiosDir.'/'.$idUser.'/'.$anho;   //Creamos la carpeta del año en curso
-                    if(!is_dir($anhoDir)){
-                        mkdir($anhoDir);
-                    }
-                    $urlDir=$oficiosDir.'/' .$idUser .'/'.$anho. '/'.$mes.'/';    //Creamos la carpeta del mes del año en curso
-                    if(!is_dir($urlDir)){
-                        mkdir($urlDir);
-                    }
-                    //$urlDoc= $urlDir.$docOficio['name']; //,$numOficio; //Se obtiene la url final para subir el oficio
-                    //$fecha=date('d-m-y-h-i-s');  //obtenemos fecha para evitar lo más posible duplicados con el mismo nombre
-                    $urlDoc =$urlDir.$caracter.'-numOfi-'.$numOficio.'.pdf';   //cambiamos el nombre del oficio
-                    //se compruaba que el oficio no exista en la carpeta del mes en curso
-                    if(!file_exists($urlDoc)){
-                        //usamos la url que generamos para mandar a guardar el oficio
-                        $oficioUrl=@move_uploaded_file($docOficio['tmp_name'], $urlDoc);
-                        //generamos una url mas limpia que se guardara en la DB sin hacer mención del directorio raiz 
-                        //$urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$docOficio['name'];
-                        $urlDB= 'oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$caracter.'-numOfi-'.$numOficio.'.pdf';
-                        //al haber subido el oficio ahora registramos la informacion en la DB
-                        uploadOficioEx($idUser, $caracter, $destId, $remId, $empId, $numOficio, $oficioRef, $fechaElab, $asunto, $respuesta, $fechaResp, $descripcion, $urlDB);
-                        if($oficioUrl){
-                            echo "<script>alert('¡El oficio se ha subido con éxito :)!'); </script>";
-                            echo "<script>setTimeout(\"location.href='../oficios-externos.php'\",500); </script>";
+            foreach ($_FILES['archivoOficio']['tmp_name'] as $key => $value){
+                //Validamos que el archivo exista
+                if($_FILES['archivoOficio']['error'][$key]>0 ){
+                    //mandamos un mensaje notificando que se envio el formulario sin cargar ningun oficio
+                    echo "<script>alert('ERROR No seleccionaste ningún archivo HDPM >:('); </script>";
+                    //echo "<script>setTimeout(\"location.href='../oficios-internos.php'\",500); </script>";
+                }
+                else{
+                    //restringimos que solo queremos documentos con extension pdf
+                    $extension='application/pdf';
+                    if($_FILES['archivoOficio']['type'] = $extension[$key]){
+                        $root='../';                    //regresamos al directorio raiz
+                        $oficiosDir=$root.'oficios';    //Creamos la carpeta oficios en la carpeta raiz si no existe
+                        if(!is_dir($oficiosDir)){
+                            mkdir($oficiosDir);
                         }
-                        else{
-                            echo "<script>alert('¡El oficio no se pudo subir :(!'); </script>";
-                            echo "<script>setTimeout(\"location.href='../oficios-externos.php'\",500); </script>";
+                        $idDir=$oficiosDir.'/'.$idUser.'/';     //Creamos la carpeta del usuario si no existe
+                        if(!is_dir($idDir)){
+                            mkdir($idDir);
+                        }
+                        $anhoDir=$oficiosDir.'/'.$idUser.'/'.$anho;   //Creamos la carpeta del año en curso
+                        if(!is_dir($anhoDir)){
+                            mkdir($anhoDir);
+                        }
+                        $urlDir=$oficiosDir.'/' .$idUser .'/'.$anho. '/'.$mes.'/';    //Creamos la carpeta del mes del año en curso
+                        if(!is_dir($urlDir)){
+                            mkdir($urlDir);
+                        }
+                        $fecha = date('d-m-y-h-i-s'); 
+                        $random = rand(999, 9999);
+                        $urlDoc =$urlDir.$caracter.'-'.$fecha.'-'.$random.'-numOfi-'.$numOficio.'.pdf';
+        
+                        if(!file_exists($urlDoc)){
+                            $oficioUrl=@move_uploaded_file($_FILES['archivoOficio']['tmp_name'][$key], $urlDoc);    
+                            $urlDB .= ',oficios/'.$idUser.'/'.$anho.'/'.$mes.'/'.$caracter.'-'.$fecha.'-'.$random.'-numOfi-'.$numOficio.'.pdf';
+                            
                         }
                     }
                     else{
-                        echo "<script>alert('Ya has subido este mismo oficio en este año y mes'); </script>";
-                        echo "<script>setTimeout(\"location.href='../oficios-externos.php'\",500); </script>";
+                        echo "<script>alert('Extensión de archivo no permitida: Los oficios deben cargarse en PDF'); </script>";
+                        echo "<script>setTimeout(\"location.href='../oficios-internos.php'\",500); </script>";                
                     }
                 }
-                else{
-                    echo "<script>alert('Extensión de archivo no permitida: Los oficios deben cargarse en PDF'); </script>";
-                    echo "<script>setTimeout(\"location.href='../oficios-externos.php'\",500); </script>";
-                }
+            } //fin Foreach
+                
+            if(!empty($oficioUrl)){
+                uploadOficioEx($idUser, $caracter, $destId, $remId, $empId, $numOficio, $oficioRef, $fechaElab, $asunto, $respuesta, $fechaResp, $descripcion, $urlDB);
+                echo "<script>alert('¡El oficio se ha subido con éxito :)!'); </script>";
+                echo "<script>setTimeout(\"location.href='../oficios-internos.php'\",500); </script>";
             }
-
+            else{
+                echo "<script>alert('¡El oficio no se pudo subir :(!'); </script>";
+                echo "<script>setTimeout(\"location.href='../oficios-internos.php'\",25500); </script>";
+            }
         }
         
         
     }
     echo listaErrores($errores);
+    //echo $urlDoc;
 ?>
 <link href="/favicon.ico" rel="shortcut icon">
     <link href="https://framework-gb.cdn.gob.mx/assets/styles/main.css" rel="stylesheet"> 

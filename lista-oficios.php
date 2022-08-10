@@ -62,7 +62,7 @@
   <div class="col-md-3"><label></label>
     <select class="form-control" id="filtroBusqueda">
       <option selected="true" disabled="disabled" value="">Seleciona una categoria</option>
-      <option value="includes/busqueda-oficios-internos-entrada.php" id="op1">Oficios Internos de Entrada</option>
+      <option value="includes/buscar-IE.php" id="op1">Oficios Internos de Entrada</option>
       <option value="includes/busqueda-oficios-internos-salida.php" id="op2">Oficios Internos de Salida</option>
       <option value="includes/busqueda-oficios-externos-entrada.php" id="op3">Oficios Externos de Entrada</option>
       <option value="includes/busqueda-oficios-externos-salida.php" id="op4">Oficios Externos de Salida</option>

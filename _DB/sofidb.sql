@@ -157,7 +157,7 @@ CREATE TABLE `oficios` (
   `ofi_fechaSICT` DATE DEFAULT NULL,
   `ofi_fechaResp` DATE DEFAULT NULL,
   `ofi_fechaSOFI` DATETIME NOT NULL DEFAULT current_timestamp(),
-  `ofi_url` VARCHAR(250) NOT NULL,
+  `ofi_url` LONGTEXT NOT NULL,
   PRIMARY KEY (`ofi_id`),
   FOREIGN KEY (`ofi_subidoPor`) REFERENCES `usuarios`(`usu_id`),
   FOREIGN KEY (`ofi_remitente`) REFERENCES `remitentes`(`rem_id`),

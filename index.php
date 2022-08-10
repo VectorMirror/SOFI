@@ -8,6 +8,15 @@
     if(isset($_SESSION['id_usuario'])){
       header('Location:portal.php');
     }
+
+ 
+  $conteo="SELECT usu_id FROM usuarios" ;
+  $regs = $DB_conection->query($conteo);
+  $numReg=mysqli_num_rows($regs);
+  
+  if($numReg =0){
+    header('Location: registro1.php');
+  }
     
     $errores = array();
     if(!empty($_POST)){

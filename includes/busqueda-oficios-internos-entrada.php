@@ -1,8 +1,17 @@
 <?php
     include_once 'DB_conection.php';
     //include_once 'consultas.php';
-    //$caracter = $_POST['idB'];
-    #consulta multitabla con inner join para mostrar los ultimos oficios subidos
+
+    //Paginacion La paginacion depende de las consultas 
+    $regPerPage = 5;
+    if(!isset($_GET['nPag'])){
+        $nPag = 0;
+    }
+    else{
+        $nPag = $_GET['nPag'];
+    }
+    $init = $nPag*$regPerPage;
+    #consulta multitabla con inner join para mostrar los oficios subidos
     $query4= "SELECT o.ofi_id, o.ofi_referencia, o.ofi_numero, o.ofi_respuesta, o.ofi_asunto, o.ofi_descripcion, o.ofi_fechaE, o.ofi_fechaSICT, o.ofi_fechaResp, o.ofi_fechaSOFI, o.ofi_url,
                 u.usu_nombre, u.usu_apellidoP, u.usu_apellidoM,
                 rem.rem_remitente, d.dest_destinatario, c.cargo_cargo, ud.uni_unidad
@@ -13,33 +22,60 @@
                 INNER JOIN cargos as c on o.ofi_cargo = c.cargo_id
                 INNER JOIN unidades as ud on o.ofi_unidad=ud.uni_id
                 WHERE o.ofi_caracter='Interno-Entrada' AND o.ofi_activo=0
-                ORDER BY o.ofi_id ASC LIMIT 50;";
+                ORDER BY o.ofi_id LIMIT $init, $regPerPage;";
+
+    
+    //consulta de busqueda en tiempo real
+    if(isset($_POST['consultaIE'])){
+        $txt=$DB_conection->real_escape_string($_POST['consultaIE']);
+        $query4= "SELECT o.ofi_id,o.ofi_caracter,o.ofi_referencia,o.ofi_numero,o.ofi_respuesta,o.ofi_asunto,o.ofi_descripcion,o.ofi_fechaE,o.ofi_fechaSICT,o.ofi_fechaResp,o.ofi_fechaSOFI,o.ofi_url,
+                    u.usu_nombre, u.usu_apellidoP, u.usu_apellidoM,
+                    rem.rem_remitente, d.dest_destinatario, c.cargo_cargo, ud.uni_unidad
+                    FROM oficios as o
+                    INNER JOIN usuarios as u ON o.ofi_subidoPor = u.usu_id
+                    INNER JOIN remitentes as rem on o.ofi_remitente = rem.rem_id
+                    INNER JOIN destinatarios as d on o.ofi_destinatario = d.dest_id
+                    INNER JOIN cargos as c on o.ofi_cargo = c.cargo_id
+                    INNER JOIN unidades as ud on o.ofi_unidad=ud.uni_id
+                    WHERE o.ofi_caracter='Interno-Entrada' AND o.ofi_referencia LIKE '%".$txt."%' 
+                    OR rem.rem_remitente LIKE '%".$txt."%'
+                    OR d.dest_destinatario LIKE '%".$txt."%' 
+                    OR o.ofi_referencia LIKE '%".$txt."%' 
+                    OR o.ofi_numero LIKE '%".$txt."%' 
+                    ORDER BY o.ofi_id LIMIT $init, $regPerPage;";
+    }
     $oficiosIE = $DB_conection->query($query4);
 
-    $numReg=mysqli_num_rows($oficiosIE);
+    $queryCR = "SELECT ofi_id FROM oficios WHERE ofi_caracter='Interno-Entrada' AND ofi_activo=0;";
+    $conteo = $DB_conection->query($queryCR);
+    $numReg = mysqli_num_rows($conteo);
     
+      
+    //Total de paginas que tendra la consulta
+    $tPag = floor($numReg/$regPerPage);
+    if(($numReg%$regPerPage) > 0){
+        $tPag++;
+    }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-</head>
-<body>
-    <h3>Lista de Oficios Internos de Entrada: </h3><?php echo 'Hay '.$numReg.' resultados';?>
+
+    <h3>Oficios Internos de Entrada </h3><?php echo 'Hay '.$numReg.' resultados';?>
+        
     <hr class="red">
-    <!--
-    <div class"row">
-        <div class="col-md-1 bottom-buffer"></div>
-        <div class="col-md-4 bottom-buffer">
-            <span class="icon-search" aria-hidden="true"></span> Filtrar Busqueda 
-            <input type="text" class="form-control" name="buscarOf" id="buscarIE" placeholder="Buscar oficio"/>
-        </div>    
-    </div>
-    -->
-    
+    <ul class="pagination">
+        
+        <?php echo 'Pagina '.($nPag+1). ' de '.$tPag .'<br/>'; ?>
+
+            <li><a href="#">&laquo;</a></li>
+            <?php for($i=0; $i < $tPag; $i++) {
+                if($i==$nPag){
+                    echo '<li><a>'.($i+1).'</a></li>';
+                }
+                else{
+                ?>
+                <li><a href="<?php echo "includes/busqueda-oficios-internos-entrada.php?nPag=".$i; ?>"> <?php echo $i+1; ?></a></li>
+            <?php }} ?>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
     <table class="table table-responsive">
 	<thead>
 		<tr>
@@ -51,16 +87,16 @@
 			<th>Oficio Referencia</th>
 			<th>Fechas</th>
 			<th>Detalles</th>
-            <th>Oficio</th>
+            <th>Oficio y Anexos</th>
 		</tr>
 	</thead>
     <tbody>
         
     <?php
-    if($DB_conection){
     //echo "se abre la conexióna la BD";
-        if(mysqli_num_rows($oficiosIE)>0){
-            while($oficioIE = mysqli_fetch_assoc($oficiosIE)){
+    
+    if($oficiosIE->num_rows > 0){
+        while($oficioIE =$oficiosIE->fetch_assoc()){
     ?>  
         <tr> 
             <td><?php echo $oficioIE['usu_nombre'].' '.$oficioIE['usu_apellidoP']. ' '. $oficioIE['usu_apellidoM']; ?></td>
@@ -71,14 +107,20 @@
             <td><b>Registrado en sistema: </b><br><?php echo $oficioIE['ofi_fechaSOFI']; ?><br>
                 <b>Recibido SICT:</b> <br><?php echo $oficioIE['ofi_fechaSICT']; ?><br>
                 <b>Fecha Elaboracion:</b> <br><?php echo $oficioIE['ofi_fechaE']; ?><br>
-                <b>Necesita Respuesta: </b><?php echo $oficioIE['ofi_respuesta']; ?>
+                <b>Necesita Respuesta: </b><?php echo $oficioIE['ofi_respuesta']; ?><br>
                 <b>Fecha para Resp:</b><br> <?php echo $oficioIE['ofi_fechaResp']; ?><br>
             </td>
             <td><b>Asunto: </b><?php echo $oficioIE['ofi_asunto'].'</br><b>Descripcion:</b> '.$oficioIE['ofi_descripcion']; ?></td>
             
             
             <td>
-                <a href="<?php echo $oficioIE['ofi_url']?>" class="btn btn-default" target="_blank">VER OFICIO</a>
+                <?php
+                    $mUrl = substr($oficioIE['ofi_url'], 1);
+                    $arrUrl = explode(',', $mUrl);
+                    foreach ($arrUrl as $anexoFile){
+                ?>
+                    <a href="<?php echo $anexoFile; ?>" class="btn btn-default" target="_blank">VER OFICIO</a><br/>
+                <?php } ?>
             </td>  
           </tr>
     <?php 
@@ -86,23 +128,28 @@
     } else{
 		echo "No se encontraron resultados";
 	}
-    } else{
-        echo "Hubo un error";
-    } ?>
+    ?>
     </tbody>
     </table>
-    <div class="container">
-        <ul class="pagination">
+    <?php echo 'Hay '.$numReg.' resultados';?>
+    <hr class="red">
+    <ul class="pagination">
+        
+        <?php echo 'Pagina '.($nPag+1). ' de '.$tPag .'<br/>'; ?>
+
             <li><a href="#">&laquo;</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+            <?php for($i=0; $i < $tPag; $i++) {
+                if($i==$nPag){
+                    echo '<li><a>'.($i+1).'</a></li>';
+                }
+                else{
+                ?>
+                <li><a href="<?php echo "includes/busqueda-oficios-internos-entrada.php?nPag=".$i; ?>"> <?php echo $i+1; ?></a></li>
+            <?php }} ?>
             <li><a href="#">&raquo;</a></li>
         </ul>
-    </div>
-    <?php echo $numReg; ?>
+
+
     <div class="top-buffer bottom-buffer"></div>
 </body>
 </html>

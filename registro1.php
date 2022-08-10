@@ -2,7 +2,15 @@
   include_once 'includes/DB_conection.php';
   include_once 'includes/funciones.php';
   include_once 'includes/crudUsers.php';
-  
+
+  $conteo="SELECT usu_id FROM usuarios" ;
+  $regs = $DB_conection->query($conteo);
+  $numReg=mysqli_num_rows($regs);
+
+  if($numReg >0){
+    header('Location: index.php');
+  }
+
   $errores = array();
     if(!empty($_POST)){
       $nombre = $DB_conection->real_escape_string(strtoupper($_POST['nombre']));
@@ -41,7 +49,7 @@
         $crearUsuario = creaUsuario($nombre, $apellido_p, $apellido_m, $correo, $cargo, $unidad, $rol, $passDB);
         if($crearUsuario>0){
           echo $nombre. ' '.$apellido_p. ' '.$apellido_m. " ha sido registrado correctamente"."<br>";
-          echo"<a href='registro1.php'> Volver </a>";
+          echo"<a href='includes/logout.php'> Inicie Sesión </a>";
           exit; 
         }
         else{
@@ -74,6 +82,7 @@
   </head>
   
   <body>
+    
   
 <h3>Registrar nuevo usuario</h3>
 <hr class="red">
@@ -261,6 +270,7 @@
                 echo listaErrores($errores);
                 ?>
               </div>
+
           </form>
           </div>
       </div>

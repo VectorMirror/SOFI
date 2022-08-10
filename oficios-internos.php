@@ -298,7 +298,7 @@
                     <label for="asunto" class="control-label">Subir archivo
                       <span class="asteriscoData form-text">*</span>
                     </label>
-                    <input  type="file" class="form-control" name="archivoOficio">
+                    <input  type="file" class="form-control" name="archivoOficio[]" multiple="">
                     <small class="smallDatos form-text form-text-error hide" aria-live="polite"> Este campo es obligatorio
                     </small>
                   </div>
@@ -458,7 +458,7 @@
                     <label for="asunto" class="control-label">Subir archivo
                       <span class="asteriscoData form-text">*</span>
                     </label>
-                    <input  type="file" class="form-control" name="archivoOficioR">
+                    <input  type="file" class="form-control" name="archivoOficioR[]" multiple="">
                     <small class="smallDatos form-text form-text-error hide" aria-live="polite"> Este campo es obligatorio
                     </small>
                   </div>

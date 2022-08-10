@@ -26,7 +26,7 @@
     <title></title>
 </head>
 <body>
-    <h3>Lista de Oficios Internos de Salida</h3>
+    <h3>Oficios Internos de Salida</h3>
     <hr class="red">
     
     <table class="table table-responsive">
@@ -40,7 +40,7 @@
 			<th>Oficio Referencia</th>
 			<th>Fechas</th>
 			<th>Detalles</th>
-            <th>Oficio</th>
+            <th>Oficio y Anexos</th>
 		</tr>
 	</thead>
     <tbody>
@@ -64,8 +64,14 @@
             
             
             <td>
-                <a href="<?php echo $oficioIS['ofi_url']?>" class="btn btn-default" target="_blank">VER OFICIO</a>
-            </td>  
+                <?php
+                    $mUrl = substr($oficioIS['ofi_url'], 1);
+                    $arrUrl = explode(',', $mUrl);
+                    foreach ($arrUrl as $anexoFile){
+                ?>
+                    <a href="<?php echo $anexoFile; ?>" class="btn btn-default" target="_blank">VER OFICIO</a><br/>
+                <?php } ?>
+            </td> 
           </tr>
     <?php 
     }
