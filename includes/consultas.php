@@ -9,11 +9,7 @@
     $userInfo = $DB_conection->query($queryUser);
     $user = $userInfo->fetch_assoc();
 
-    #consulta multitabla con inner join para conseguir los id y hacer la paginacion
-    $idPagAct= "SELECT u.usu_id, u.idUsuario
-                    FROM usuarios as u
-                    WHERE u.usu_activo=0 ORDER BY u.usu_id ASC;";
-    $resultP = $DB_conection->query($idPagAct);
+    
 
     #consulta multitabla con inner join para mostrar usuarios con cuenta activa
     $query2= "SELECT u.usu_nombre, u.usu_apellidoP, u.usu_apellidoM, u.usu_correo, u.usu_fecha, u.usu_activo, u.usu_id,
@@ -36,19 +32,15 @@
     
 
     #consulta para cargas la tabla cargos
-    $query5="SELECT * FROM cargos";
+    $query5="SELECT * FROM cargos WHERE cargo_tipo=1";
     $cargos=$DB_conection->query($query5);
 
     #consulta para cargas la tabla cargos
-    $query6="SELECT * FROM unidades";
+    $query6="SELECT * FROM unidades WHERE uni_tipo=1";
     $unidades=$DB_conection->query($query6);
 
     //consulta para mandar a llamar los ultimos documentos subidos 
-    $query7="SELECT ofi_id, ofi_caracter, ofi_asunto, ofi_fechaE, ofi_fechaSOFI, ofi_url FROM oficios ORDER BY ofi_fechaSOFI DESC LIMIT 6 ";
+    $query7="SELECT ofi_id, ofi_asunto, ofi_fechaE, ofi_fechaSOFI, ofi_url FROM oficios ORDER BY ofi_id DESC LIMIT 9";
     $lastOfi=$DB_conection->query($query7);
-    
-    //consulta para que me muestre las ultimas empresas registradas
-    $query8="SELECT * FROM empresas ORDER BY emp_empresa DESC LIMIT 5";
-    $lastEmp=$DB_conection->query($query8);
 
 ?>

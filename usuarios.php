@@ -16,6 +16,10 @@
     <!-- CSS -->
     <link href="/favicon.ico" rel="shortcut icon">
     <link href="https://framework-gb.cdn.gob.mx/assets/styles/main.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <script src="js/jquery-3.6.0.min.js"> </script>
+    <script type="text/javascript" src="js/datatables.js"></script>
+    <script src="js/dataofi.js"></script>
 
     <!-- Respond.js soporte de media queries para Internet Explorer 8 -->
     <!-- ie8.js EventTarget para cada nodo en Internet Explorer 8 -->
@@ -44,14 +48,12 @@
   </div>-->
     
 
-<main>
-<table class="table table-responsive">
+<main class="container">
+<table class="table table-responsive display" id="table-ofi">
 	<thead>
 		<tr>
       <!--<th>Id</th>-->
 			<th>Nombre</th>
-			<th>Apellido Paterno</th>
-			<th>Apellido Materno</th>
 			<th>Correo</th>
 			<th>Cargo</th>
 			<th>Fecha registro</th>
@@ -70,23 +72,21 @@
 
     ?>
         <tr> 
-            <td><?php echo $row['usu_nombre'] ?></td>
-            <td><?php echo $row['usu_apellidoP'] ?></td>
-            <td><?php echo $row['usu_apellidoM'] ?></td>
-            <td><?php echo $row['usu_correo'] ?></td>
-            <td><?php echo $row['cargo_cargo'] ?></td>
-            <td><?php echo $row['usu_fecha'] ?></td>
-            <td><?php echo $row['rol_permiso'] ?></td>
+          <td><?php echo ucwords(strtolower($row['usu_nombre']. ' '. $row['usu_apellidoP']. ' '. $row['usu_apellidoM'])); ?></td>
+          <td><?php echo $row['usu_correo'] ?></td>
+          <td><?php echo $row['cargo_cargo'] ?></td>
+          <td><?php echo $row['usu_fecha'] ?></td>
+          <td><?php echo $row['rol_permiso'] ?></td>
             <?php if($row['usu_activo']==0) { ?>
-                <td><img src="img/0.png" width="15px" height="15px" title="Cuenta Activa"/></td>
+              <td><img src="img/0.png" width="15px" height="15px" title="Cuenta Activa"/></td>
             <?php } else if($row['usu_activo']==1){ ?>
-                <td><img src="img/1.png" width="15px" height="15px" title="Cuenta Inactiva"/></td>
+              <td><img src="img/1.png" width="15px" height="15px" title="Cuenta Inactiva"/></td>
             <?php } ?>
-            
-            <td>
+          
+          <td>
             <a href="editar-usuario.php?id=<?php echo $row['usu_id']?>" class="btn btn-default">Editar</a>
-            </td>  
-          </tr>
+          </td>  
+        </tr>
     <?php 
     }
     } else{
@@ -100,6 +100,7 @@
 
 </div>   
     </main>
+    <div class="top-buffer bottom-buffer"></div>
 
     <!-- JS -->
     

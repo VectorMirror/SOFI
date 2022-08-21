@@ -206,6 +206,74 @@ $(document).ready(function() {
       });
 });
 
+///buscar cargo Entrada
+$(document).ready(function() {
+  $('#buscarCar').on('keyup', function() {
+      var buscarCarIE = $(this).val();		
+      var dataStringCarIE = 'buscarCar='+buscarCarIE;
+    if(buscarCarIE.length>0){
+          $.ajax({
+              type: "POST",
+              url: "includes/text-car.php",
+              data: dataStringCarIE,
+              success: function(carg) {
+                  //Escribimos las sugerencias que nos manda la consulta
+                  $('#suggestionsc').fadeIn(1000).html(carg);
+                  //Al hacer click en algua de las sugerencias
+                  $('.suggest-element').on('click', function(){
+                          //Obtenemos la id unica de la sugerencia pulsada
+                          var idCar = $(this).attr('id');
+                          //Editamos el valor del input con data de la sugerencia pulsada
+                          $('#buscarCar').val($('#'+idCar).attr('data'));
+                          //Hacemos desaparecer el resto de sugerencias
+                          $('#suggestionsc').fadeOut(1000);
+                          //alert('Has seleccionado el '+id+' '+$('#'+id).attr('data'));
+                          return false;
+                  });
+              }
+          });
+      }
+      else{
+          $('#suggestionsc').fadeOut(1000);
+      }
+      });
+});
+
+///buscar cargo Remitente
+$(document).ready(function() {
+  $('#buscarCarEx').on('keyup', function() {
+      var buscarCarEx = $(this).val();		
+      var dataStringCarEx = 'buscarCarEx='+buscarCarEx;
+    if(buscarCarEx.length>0){
+          $.ajax({
+              type: "POST",
+              url: "includes/text-car1.php",
+              data: dataStringCarEx,
+              success: function(cargo) {
+                  //Escribimos las sugerencias que nos manda la consulta
+                  $('#suggestionsEx').fadeIn(1000).html(cargo);
+                  //Al hacer click en algua de las sugerencias
+                  $('.suggest-element').on('click', function(){
+                          //Obtenemos la id unica de la sugerencia pulsada
+                          var idCarEx = $(this).attr('id');
+                          //Editamos el valor del input con data de la sugerencia pulsada
+                          $('#buscarCarEx').val($('#'+idCarEx).attr('data'));
+                          //Hacemos desaparecer el resto de sugerencias
+                          $('#suggestionsEx').fadeOut(1000);
+                          //alert('Has seleccionado el '+id+' '+$('#'+id).attr('data'));
+                          return false;
+                  });
+              }
+          });
+      }
+      else{
+          $('#suggestionsEx').fadeOut(1000);
+      }
+      });
+});
+
+/////////////////////////////////////////////////////////////////////////////////////
+
 //Funcion para agregar destinatarios a la DB sin refrescar formulario
 $(document).ready(function() {
   $('#btn-addDest').click(function() {
@@ -285,6 +353,35 @@ $(document).ready(function() {
         $('#t-emp').val('');
         $('#emp').modal('hide'); 
         $('.msg-emp').fadeOut(10000);      
+      }               
+    });
+    return false;
+  });
+})
+
+//con esta funcion guardamos nuevos cargos en la db sin refrescar pagina principal
+$(document).ready(function() {
+  $('#btn-addCargo').click(function() {
+    var datosCargo= $('#form-cargo').serialize();
+    //alert(datos);
+    //return false;
+    $.ajax({
+      url: 'includes/addCargo.php',
+      type: 'POST',
+      datatype: 'html',
+      data: datosCargo,
+      success: function(cargo) {
+        if(cargo=1){
+          $('.msg-c').fadeIn(1000).html('<div class="alert alert-info">Si el nombre no aparece en la lista es porque ingreso un nombre invalido con menos de 5 letras</div>');
+          //alert('Se ha agregado bien');
+          //alert(datos);
+        }
+        else{
+          alert('mamo este pedo');
+        }
+        $('#t-car').val('');
+        $('#cargo').modal('hide'); 
+        $('.msg-c').fadeOut(10000);      
       }               
     });
     return false;

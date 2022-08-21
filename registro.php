@@ -237,7 +237,7 @@
                   <label for="contraseniaUsuario" class="control-label">Repite Contraseña
                     <span class="asteriscoData form-text">*</span>
                   </label>
-                  <input id="pass02" type="text" class="campos form-control ember-text-field ember-view" name="contrasena01">
+                  <input id="pass02" type="password" class="campos form-control ember-text-field ember-view" name="contrasena01">
                   <small class="smallDatos form-text form-text-error hide" aria-live="polite"> Este campo es obligatorio
                   </small>
                 </div>

@@ -28,8 +28,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Oficios <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="lista-oficios.php">Lista de Oficios</a></li>
-            <li><a href="oficios-internos.php">Subir oficio interno</a></li>
-            <li><a href="oficios-externos.php">Subir oficio externo</a></li>
+            <li><a href="subir-oficio-nuevo.php">Subir nuevo oficio</a></li>
           </ul>
         </li>
         <li>

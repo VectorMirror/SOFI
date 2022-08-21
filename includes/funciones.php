@@ -89,9 +89,9 @@
 
 
     #Se comprueba que el nombre de empresa ingresado no exista en la base de datos
-    function empresaExiste($empresa){
+    function empUniExiste($empresa){
         global $DB_conection;
-        $consulta = $DB_conection -> prepare ('SELECT emp_id FROM empresas WHERE emp_empresa = ? LIMIT 1');
+        $consulta = $DB_conection -> prepare ('SELECT uni_id FROM unidades WHERE uni_unidad = ? LIMIT 1');
         $consulta->bind_param("s", $empresa);
         $consulta->execute();
         $consulta->store_result();
@@ -107,10 +107,41 @@
     }
 
      #Se guarda la nueva empresa a la DB
-     function addEmpresa($empresa){
+     function addEmpUni($empresa, $tipo){
         global $DB_conection;
-        $consulta = $DB_conection->prepare("INSERT INTO empresas (emp_empresa) VALUES (?)");
-        $consulta->bind_param('s', $empresa);
+        $consulta = $DB_conection->prepare("INSERT INTO unidades(uni_unidad, uni_tipo) VALUES (?,?)");
+        $consulta->bind_param('si', $empresa, $tipo);
+        if($consulta->execute()){
+            return $DB_conection->insert_id;
+        }
+        else{
+            return 0;
+        }       
+    }
+
+    #Se comprueba que el nombre de empresa ingresado no exista en la base de datos
+    function cargoExiste($cargo){
+        global $DB_conection;
+        $consulta = $DB_conection -> prepare ('SELECT cargo_id FROM cargos WHERE cargo_cargo = ? LIMIT 1');
+        $consulta->bind_param("s", $cargo);
+        $consulta->execute();
+        $consulta->store_result();
+        $fila = $consulta->num_rows;
+        $consulta ->close();
+
+        if($fila >0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+     #Se guarda la nueva empresa a la DB
+     function addCargo($cargo, $tipo){
+        global $DB_conection;
+        $consulta = $DB_conection->prepare("INSERT INTO cargos(cargo_cargo, cargo_tipo) VALUES (?,?)");
+        $consulta->bind_param('si', $cargo, $tipo);
         if($consulta->execute()){
             return $DB_conection->insert_id;
         }
@@ -120,8 +151,8 @@
     }
     #APARTADO DE LAS FUNCIONES PARA SUBIR LA INFORMACION A DB DE LOS OFICIOS SUBIDOS
     #REvisamos que los datos de los formulario de oficios internos de entrada esten completos
-    function checarFormInterno($destinatario, $remitente, $cargo, $unidad, $oficioRef, $numOficio, $asunto, $descripcion, $fechaElab, $fechaSICT){
-        if(strlen(trim($destinatario)) <1 || strlen(trim($remitente)) <1 ||  strlen(trim($cargo)) <1 || strlen(trim($unidad)) <1 ||  strlen(trim($oficioRef)) <1 ||  strlen(trim($numOficio)) <1 ||  strlen(trim($asunto)) <1 ||  strlen(trim($descripcion)) <1 ||  strlen(trim($fechaElab)) <1 ||  strlen(trim($fechaSICT)) <1){
+    function checarFormInterno($destinatario, $remitente, $cargoDest, $unidadDest, $cargoRem, $unidadRem, $asunto, $observacion, $fechaElab, $fechaRecep){
+        if(strlen(trim($destinatario)) <1 || strlen(trim($remitente)) <1 ||  strlen(trim($cargoDest)) <1 || strlen(trim($unidadDest)) <1 ||  strlen(trim($cargoRem)) <1 ||  strlen(trim($unidadRem)) <1 ||  strlen(trim($asunto)) <1 ||  strlen(trim($observacion)) <1 ||  strlen(trim($fechaElab)) <1 ||  strlen(trim($fechaRecep)) <1){
             return true;            
         }
         else {
@@ -129,10 +160,10 @@
         }
     }
     //funcion de oficios internos de entrada
-    function uploadOficioIE($idUser, $caracter, $destinatario, $remitente, $cargo, $unidad, $oficioRef, $numOficio, $respuesta, $asunto, $descripcion, $urlDoc, $fechaElab, $fechaResp, $fechaSICT){
+    function uploadOficioIE($idUser,  $destinatario, $cargoD, $unidadD, $remitente, $cargoR, $unidadR, $asunto, $descripcion, $urlDoc, $fechaElab, $fechaSICT){
         global $DB_conection;
-        $consulta = $DB_conection->prepare("INSERT INTO oficios(ofi_subidoPor, ofi_caracter, ofi_destinatario, ofi_remitente, ofi_cargo, ofi_unidad, ofi_referencia, ofi_numero, ofi_respuesta, ofi_asunto, ofi_descripcion, ofi_url, ofi_fechaE, ofi_fechaResp, ofi_fechaSICT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $consulta->bind_param('isiiiisssssssss', $idUser, $caracter, $destinatario, $remitente, $cargo, $unidad, $oficioRef, $numOficio, $respuesta, $asunto, $descripcion, $urlDoc, $fechaElab, $fechaResp, $fechaSICT);
+        $consulta = $DB_conection->prepare("INSERT INTO oficios(ofi_subidoPor, ofi_destinatario, ofi_cargoDest, ofi_unidadDest, ofi_remitente, ofi_cargoRem, ofi_unidadRem, ofi_asunto, ofi_observacion, ofi_url, ofi_fechaE, ofi_fechaRecep) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+        $consulta->bind_param('iiiiiiisssss', $idUser,  $destinatario, $cargoD, $unidadD, $remitente, $cargoR, $unidadR, $asunto, $descripcion, $urlDoc, $fechaElab, $fechaSICT);
         if($consulta->execute()){
             return $DB_conection->insert_id;
         }

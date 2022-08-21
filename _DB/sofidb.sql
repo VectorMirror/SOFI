@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS `SOFI` CHARACTER SET = utf8mb4;
+USE `SOFI`;
 CREATE TABLE `roles` (
   `rol_id` INT(11) NOT NULL AUTO_INCREMENT,
   `rol_permiso` VARCHAR(50) NOT NULL,
@@ -14,6 +16,7 @@ CREATE TABLE `unidades` (
   `uni_id` INT(11) NOT NULL AUTO_INCREMENT,
   `uni_num` INT(11) NOT NULL,
   `uni_unidad` VARCHAR(100) NOT NULL,
+  `uni_tipo` INT(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`uni_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -141,6 +144,48 @@ CREATE TABLE `usuarios` (
 CREATE TABLE `oficios` (
   `ofi_id` INT(11) NOT NULL AUTO_INCREMENT,
   `ofi_subidoPor` INT(11) NOT NULL,
+  `ofi_destinatario` INT(11) NOT NULL,
+  `ofi_cargoDest` INT(11) DEFAULT NULL,
+  `ofi_unidadDest` INT(11) DEFAULT NULL,
+  `ofi_remitente` INT(11) NOT NULL,
+  `ofi_cargoRem` INT(11) NOT NULL,
+  `ofi_unidadRem` INT(11) DEFAULT NULL,
+  `ofi_asunto` VARCHAR(50) NOT NULL,
+  `ofi_observacion` VARCHAR(250) NOT NULL,
+  `ofi_fechaE` DATE NOT NULL,
+  `ofi_fechaRecep` DATE NOT NULL,
+  `ofi_fechaSOFI` DATETIME NOT NULL DEFAULT current_timestamp(),
+  `ofi_activo` INT(2) NOT NULL DEFAULT 0,
+  `ofi_url` LONGTEXT NOT NULL,
+  PRIMARY KEY (`ofi_id`),
+  FOREIGN KEY (`ofi_subidoPor`) REFERENCES `usuarios`(`usu_id`),
+  FOREIGN KEY (`ofi_destinatario`) REFERENCES `destinatarios`(`dest_id`),
+  FOREIGN KEY (`ofi_cargoDest`) REFERENCES `cargos`(`cargo_id`),
+  FOREIGN KEY (`ofi_unidadDest`) REFERENCES `unidades`(`uni_id`),
+  FOREIGN KEY (`ofi_remitente`) REFERENCES `remitentes`(`rem_id`),
+  FOREIGN KEY (`ofi_cargoRem`) REFERENCES `cargos`(`cargo_id`),
+  FOREIGN KEY (`ofi_unidadRem`) REFERENCES `unidades`(`uni_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `oficios` (`ofi_id`, `ofi_subidoPor`,`ofi_destinatario`, `ofi_cargoDest`, `ofi_unidadDest`,`ofi_remitente`, `ofi_cargoRem`, `ofi_unidadRem`, `ofi_asunto`, `ofi_observacion`, `ofi_fechaE`, `ofi_fechaRecep`, `ofi_url`) VALUES
+(1, 1, 1, 5, 64, 1, 1, 5, 'Hola a todos1', 'Mensaje1', '2020-02-10', '2020-03-15', 'oficios/1/2022/jul/991090201073.pdf'),
+(2, 1, 2, 2, 17, 2, 3, 11, 'Hola a todos2','Mensaje2', '2020-02-21', '2020-05-10', 'oficios/1/2022/jul/991090201073.pdf'),
+(3, 1, 2, 3, 12, 4, 4, 20, 'Hola a todos3', 'Mensaje3', '2021-02-10', '2021-05-17', 'oficios/1/2022/jul/991090201090.pdf'),
+(4, 1, 1, 4, 12, 5, 2, 40, 'Hola a todos4', 'Mensaje4', '2022-03-21', '2022-08-10', 'oficios/1/2022/jul/991090201073.pdf'),
+(5, 1, 1, 4, 14, 7, 5, 21, 'Hola a todos5', 'Mensaje5', '2021-05-16', '2021-05-30', 'oficios/1/2022/jul/991090201073.pdf'),
+(6, 1, 3, 5, 13, 6, 2, 13, 'Hola a todos6', 'Mensaje6', '2020-11-26', '2020-12-01', 'oficios/1/2022/jul/991090201090.pdf'),
+(7, 1, 4, 2, 10, 4, 1, 8, 'Hola a todos7', 'Mensaje7', '2021-02-25', '2021-06-10', 'oficios/1/2022/jul/PETM910426MMCXPR07.pdf'),
+(8, 1, 4, 3, 11, 3, 7, 6, 'Hola a todos8', 'Mensaje8', '2022-01-18', '2022-03-25', 'oficios/1/2022/jul/TAGJ690626MDFPNL06 (1).pdf'),
+(9, 1, 1, 4, 12, 2, 8, 1, 'Hola a todos9', 'Mensaje9', '2020-08-18', '2020-09-16', 'oficios/1/2022/jul/Certificado_3aa7c9c4-4d81-411c-843c-2522dd8c943c.pdf'),
+(10, 1, 3, 1, 18, 1, 7, 8, 'Hola a todos10', 'Mensaje10', '2010-09-25', '2019-02-14', 'oficios/1/2022/jul/991090201090.pdf'),
+(11, 1, 2, 6, 16, 2, 5, 16, 'Hola a todos11', 'Mensaje11', '2020-06-23', '2020-08-11', 'oficios/1/2022/jul/Interno-Entrada-numOfi-asdfg21.pdf'),
+(12, 1, 1, 2, 13, 5, 2, 15, 'Hola a todos12', 'Mensaje12', '2021-10-31', '2021-11-11', 'oficios/1/2022/jul/Interno-Entrada-numOfi-asdfg21.pdf'),
+(13, 1, 2, 4, 11, 2, 4, 11, 'Hola a todos13', 'Mensaje13', '2022-01-30', '2022-05-30', ',oficios/1/2022/ago/Interno-Entrada-06-08-22-09-24-31-8734-numOfi-SAN-1267.pdf,oficios/1/2022/ago/Interno-Entrada-06-08-22-09-24-31-5843-numOfi-SAN-1267.pdf'),
+(14, 1, 1, 2, 7, 1, 6, 21, 'Hola a todos14', 'Mensaje14', '2022-02-13', '2022-04-16', ',oficios/1/2022/ago/18-08-22_609038-numOfi-217515.xlsx,oficios/1/2022/ago/18-08-22_911397-numOfi-217515.docx,oficios/1/2022/ago/18-08-22_939151-numOfi-217515.pdf');
+/*
+CREATE TABLE `oficiosOld` (
+  `ofi_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `ofi_subidoPor` INT(11) NOT NULL,
   `ofi_caracter` VARCHAR(50) NOT NULL,
   `ofi_referencia` VARCHAR(30) NOT NULL DEFAULT 'N/A',
   `ofi_numero` VARCHAR(30) NOT NULL DEFAULT 'N/A',
@@ -166,3 +211,4 @@ CREATE TABLE `oficios` (
   FOREIGN KEY (`ofi_unidad`) REFERENCES `unidades`(`uni_id`),
   FOREIGN KEY (`ofi_empresa`) REFERENCES `empresas`(`emp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+*/

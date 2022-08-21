@@ -19,7 +19,18 @@
     <!-- CSS -->
     <link href="/favicon.ico" rel="shortcut icon">
     <link href="https://framework-gb.cdn.gob.mx/assets/styles/main.css" rel="stylesheet">
-    
+    <style>
+      .extDoc{
+        padding-left: 2rem;
+      }
+      .extDoc img{     
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        border: 0px solid #13322B;
+        margin: 0 0 0 -2rem;
+      }
+    </style>
 
     <!-- Respond.js soporte de media queries para Internet Explorer 8 -->
     <!-- ie8.js EventTarget para cada nodo en Internet Explorer 8 -->
@@ -37,28 +48,34 @@
     <!-- Contenido -->
     <?php include_once 'header.php'; ?>
 <main class="container">
-    <h3> Bienvenido <?php echo $user['usu_nombre'].' '.$user['usu_apellidoP']. ' '.$user['usu_apellidoM']; ?></h3>
+    <h3> Bienvenido <?php echo ucwords(strtolower($user['usu_nombre'].' '.$user['usu_apellidoP']. ' '.$user['usu_apellidoM'])); ?></h3>
 <hr class="red">
 
 <main>
-    <h4>Ultimos Oficios Registrados</h4>
+    <h4>Últimos Oficios Registrados</h4>
     <hr class="red">
     <div class="row">
       <?php
         foreach($lastOfi as $documento){
-          echo'
-          <div class="col-md-4 bottom-buffer">
-            <a href="'.$documento['ofi_url'].'" target="_blank"><img src="img/pdf.png" width="58px" height="58px"></a> <br>
-            <b>Caracter:</b>"'.$documento['ofi_caracter'].'"<br>
-            <b>Fecha Elaboracion:</b>"'.$documento['ofi_fechaE'].'"<br>
-            <b>Fecha Registro SOFI:</b>"'.$documento['ofi_fechaSOFI'].'"<br>
-            <b>Asunto:</b>"'.$documento['ofi_asunto'].'"<br>
+          $html ='<div class="col-md-4 bottom-buffer">';
+          $mUrl = substr($documento['ofi_url'], 1);
+          $arrUrl = explode(',', $mUrl);
+          foreach ($arrUrl as $anexoFile){
+            $ext= pathinfo($anexoFile, PATHINFO_EXTENSION);
+            $html .='
+            <a href="'.$anexoFile.'" target="_blank"><img src="img/'.$ext.'.png"></a>';
+           } 
+           $html .='<br>
+            <b>Fecha Elaboracion: </b>'.$documento['ofi_fechaE'].'<br>
+            <b>Fecha Registro SOFI: </b>'.$documento['ofi_fechaSOFI'].'<br>
+            <b>Asunto: </b>'.$documento['ofi_asunto'].'<br>
           </div>';
+          echo $html;
         }
       ?>
     </div>
     
      <script src="https://framework-gb.cdn.gob.mx/gobmx.js"></script>
-
+     <script type="text/javascript" src="js/buscar.js"></script>
   </body>
 </html>
