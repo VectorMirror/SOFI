@@ -141,7 +141,7 @@ $(document).ready(function() {
         });
 });
 
-///buscar empresa de entrada
+///buscar empresa o Unidad del destinatario
 $(document).ready(function() {
   $('#buscarEmp').on('keyup', function() {
       var buscarEmp = $(this).val();		
@@ -173,15 +173,15 @@ $(document).ready(function() {
       }
       });
 });
-///buscar empresa de salida
+///buscar empresa o Unidad del remitente
 $(document).ready(function() {
   $('#buscarEmpEx').on('keyup', function() {
       var buscarEmpEx = $(this).val();		
-      var dataStringEmpEx = 'buscarEmp='+buscarEmpEx;
+      var dataStringEmpEx = 'buscarEmpEx='+buscarEmpEx;
     if(buscarEmpEx.length>0){
           $.ajax({
               type: "POST",
-              url: "includes/text-emp.php",
+              url: "includes/text-emp1.php",
               data: dataStringEmpEx,
               success: function(data) {
                   //Escribimos las sugerencias que nos manda la consulta

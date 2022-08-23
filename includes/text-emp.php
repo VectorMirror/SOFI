@@ -2,7 +2,7 @@
     require_once 'DB_conection.php';
     require_once 'consultas.php';
 
-    $html = '';
+    //$html = '';
     $html1 = '';
     $emp = $_POST['buscarEmp'];
     
@@ -36,7 +36,7 @@
     else{
         $html1.='<div><a class="suggest-element">No hay resultados similares a tu busqueda</div>';
     }
-    echo $html;
+    //echo $html;
     echo $html1;
 
 ?>

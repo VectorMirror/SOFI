@@ -32,7 +32,7 @@
     
 
     #consulta para cargas la tabla cargos
-    $query5="SELECT * FROM cargos WHERE cargo_tipo=1";
+    $query5="SELECT * FROM cargos WHERE cargo_tipo=1 ORDER BY cargo_cargo ASC;";
     $cargos=$DB_conection->query($query5);
 
     #consulta para cargas la tabla cargos

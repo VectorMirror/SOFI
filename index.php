@@ -14,7 +14,7 @@
   $regs = $DB_conection->query($conteo);
   $numReg=mysqli_num_rows($regs);
   
-  if($numReg =0){
+  if($numReg ==0){
     header('Location: registro1.php');
   }
     

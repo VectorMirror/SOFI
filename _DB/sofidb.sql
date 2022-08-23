@@ -16,7 +16,7 @@ CREATE TABLE `unidades` (
   `uni_id` INT(11) NOT NULL AUTO_INCREMENT,
   `uni_num` INT(11) NOT NULL,
   `uni_unidad` VARCHAR(100) NOT NULL,
-  `uni_tipo` INT(2) NOT NULL DEFAULT 0,
+  `uni_tipo` INT(2) NOT NULL DEFAULT 0 COMMENT '0=Externo 1=Interno',
   PRIMARY KEY (`uni_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -87,41 +87,61 @@ INSERT INTO `unidades` (`uni_id`, `uni_num`, `uni_unidad`) VALUES
 (63, 712, 'DIR. GRAL. DE RECURSOS MATERIALES'),
 (64, 713, 'UNIDAD DE TECNOLOGIA DE INFORMACION Y COMUNICACIONES');
 
+UPDATE `unidades` SET `uni_tipo`=1 WHERE `uni_tipo`=0;
 
 CREATE TABLE `remitentes`(
-    `rem_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `rem_remitente` VARCHAR(100) NOT NULL,
-    PRIMARY KEY (`rem_id`)
+  `rem_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `rem_remitente` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`rem_id`)
 )ENGINE = INNODB DEFAULT CHARSET = utf8;
 
 CREATE TABLE `destinatarios`(
-    `dest_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `dest_destinatario` VARCHAR(100) NOT NULL,
-    PRIMARY KEY (`dest_id`)
+  `dest_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `dest_destinatario` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`dest_id`)
 )ENGINE = INNODB DEFAULT CHARSET = utf8;
 
     
-    create TABLE `empresas`(
-    `emp_id`INT(11) not null AUTO_INCREMENT,
-    `emp_empresa` VARCHAR(50)not null,
-    PRIMARY key(`emp_id`)
-    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `empresas`(
+  `emp_id`INT(11) not null AUTO_INCREMENT,
+  `emp_empresa` VARCHAR(50)not null,
+  PRIMARY key(`emp_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `cargos`(
-    `cargo_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `cargo_cargo` VARCHAR(100) NOT NULL,
-    PRIMARY KEY (`cargo_id`)
+  `cargo_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `cargo_cargo` VARCHAR(250) NOT NULL,
+  `cargo_tipo` INT(2) NOT NULL DEFAULT 0 COMMENT '0=Externo 1=Interno',
+  PRIMARY KEY (`cargo_id`)
 )ENGINE = INNODB DEFAULT CHARSET = utf8;
 
-INSERT INTO `cargos` (`cargo_id`, `cargo_cargo`) VALUES
-(1, 'Dirección Coordinadora de Innovación y Desarrollo Tecnológico'),
-(2, 'Dirección de Desarrollo Tecnológico'),
-(3, 'Dirección de Administración y Gestión Electrónica de Documentos'),
-(4, 'Subdirección de Sistemas Administrativos'),
-(5, 'Subdirección de Implementación y Administración de Aplicaciones'),
-(6, 'Subdirección de Gestión Electrónica de Documentos'),
-(7, 'Departamento de Portales y Administración de Contenido'),
-(8, 'Departamento de Sistemas Ejecutivos');
+INSERT INTO `cargos` (`cargo_id`, `cargo_cargo`, `cargo_tipo`) VALUES
+(1, 'Dirección Coordinadora de Innovación y Desarrollo Tecnológico', 1),
+(2, 'Dirección de Desarrollo Tecnológico', 1),
+(3, 'Dirección de Administración y Gestión Electrónica de Documentos', 1),
+(4, 'Subdirección de Sistemas Administrativos', 1),
+(5, 'Subdirección de Implementación y Administración de Aplicaciones', 1),
+(6, 'Subdirección de Gestión Electrónica de Documentos', 1),
+(7, 'Departamento de Portales y Administración de Contenido', 1),
+(8, 'Departamento de Sistemas Ejecutivos', 1),
+(9, 'Subdirección de Administración de Portales', 1),
+(10, 'Subdirección de Politica de Transparencia e Información', 1),
+(11, 'Subdirección de Administración de Portales', 1),
+(12, 'Subdirección de Innovación Tecnológica', 1),
+(13, 'Subdirección de Comunicaciones e Ingeniería', 1),
+(14, 'Subdirección de Seguridad Informática y Servicios de Voz', 1),
+(15, 'Jefatura de Departamento de Informática', 1),
+(16, 'Subdirección de Sistemas Sectoriales', 1),
+(17, 'Subdirección de Sistemas Administrativos', 1),
+(18, 'Jefatura de Departamento de Supervisión de Entrega de Servicios', 1),
+(29, 'Subdirección de Administración de Soporte a Servicios de Tecnologías deInformación y Comunicaciones ', 1),
+(20, 'Jefatura de Departamento de Comunicaciones e Ingeniería', 1),
+(21, 'Jefatura de Departamento de Portales y Administración de Contenido', 1),
+(22, 'Dirección de Normatividad en Tecnologiías de la Información y Comunicaciones', 1),
+(23, 'Dirección Coordinadora de Estartegía en Tecnología de Información y Comunicaciones', 1),
+(24, 'Dirección de Comunicaciones', 1),
+(25, 'Dirección de Servicios Informáticos', 1),
+(26, 'Titular de la Unidad de Tecnologías de la Infomación y Comunicaciones', 1);
 
 CREATE TABLE `usuarios` (
   `usu_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -139,7 +159,7 @@ CREATE TABLE `usuarios` (
   FOREIGN KEY (`usu_adscripcion`) REFERENCES `cargos`(`cargo_id`),
   FOREIGN KEY (`usu_rol`) REFERENCES `roles`(`rol_id`),
   FOREIGN KEY (`usu_unidad`) REFERENCES `unidades`(`uni_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `oficios` (
   `ofi_id` INT(11) NOT NULL AUTO_INCREMENT,
